@@ -1,7 +1,13 @@
 <?php
 
 include '../app/vendor/autoload.php';
-$foo = new App\Acme\Foo();
+use App\Acme\Foo;
+use App\Acme\Sbis;
+
+$foo = new Foo();
+$curl = new Sbis();
+
+$curl->hello();
 
 ?><!DOCTYPE html>
 <html>

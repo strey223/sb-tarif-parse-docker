@@ -3,8 +3,6 @@
 .DS_Store
 
 # Application
-web/app/composer.json
-web/app/composer.lock
 web/app/vendor/
 web/app/doc/
 web/app/report/
@@ -15,12 +13,6 @@ data/
 .idea/**/tasks.xml
 .idea/dictionaries
 .idea
-
-# Netbeans
-nbproject/
-/nbproject/
-/nbproject/private/
-/nbproject/private/private.properties
 
 # SSL Certs
 etc/ssl/

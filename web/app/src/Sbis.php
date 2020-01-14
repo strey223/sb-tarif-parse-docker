@@ -14,7 +14,6 @@ class Sbis
     {
         $curl = new Client();
         $response = $curl->request('GET', self::URL_DOMAIN . '/tariffs?tab=tenders');
-        $status = $response->getStatusCode();
         $html = $response->getBody()->getContents();
         $crawler = new Crawler($html);
 
@@ -33,7 +32,7 @@ class Sbis
             });
 
 
-        /*$crawler->filter('[href]')
+        $crawler->filter('[href]')
             ->each(function ($node) {
                 $domElement = $node->getNode(0);
                 $href = $domElement->getAttribute('href');
@@ -48,14 +47,39 @@ class Sbis
 
                 $url = self::URL_DOMAIN . $href;
 
-                if ($href && is_string($href)) {
+                $parseUrl = parse_url($url);
+                $path = $parseUrl['path'] ?? '';
+                if ($path) {
+                    return;
+                }
+
+                $parsePathFile = pathinfo($path);
+
+                $extension = $parsePathFile['extension'] ?? ''; // php
+                $nameFile = $parsePathFile['basename'] ?? ''; // lib.inc.php
+                $pathFile = $parsePathFile['dirname'] ?? ''; // путь к файлу /www/htdocs/inc
+
+                //filemtime - время изменения файла
+
+                if (!$nameFile || !$pathFile ||
+                    !$extension || $extension !== 'js' || $extension !== 'css') {
+                    return;
+                }
+
+                //$folderHash = md5($pathFile);
+
+                $assetsPath = Singleton::app()->basePath() . 'assets/';
+
+                $checkFile = $assetsPath . $nameFile;
+
+                /*if ($href && is_string($href)) {
                     if ($href[0] == '/') {
                         $href = self::URL_DOMAIN . $href;
                     }
                     $domElement->setAttribute('href', $href);
                     return;
-                }
-            });*/
+                }*/
+            });
 
       /*$crawler->filter('head link')
         ->each(function ($node) {
@@ -77,12 +101,14 @@ class Sbis
         //echo $content1;
 
         //$content = $crawler->filter('.billing-PriceList__service-detail.billing-PriceList__tip')->last()->html();
+        header('Content-Type: text/html');
         echo $content;
 
     }
 
     function redirectSbis()
     {
+        $time = time();
         $request = new Client();
         $uri = $_SERVER['REQUEST_URI'] ?? '';
         $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -105,13 +131,12 @@ class Sbis
             case 'json':
                 $contentType = 'application/json';
         }*/
-        $response = $request->request($requestMethod, $url, [
-     //       'headers'  => ['content-type' => $contentType],
-        ]);
+        $response = $request->request($requestMethod, $url);
         $contentType = $response->getHeader('content-type')[0] ?? 'text/html';
-
         $html = $response->getBody()->getContents();
+        $time = time() - $time;
         header("Content-Type: $contentType");
+        header("X-Funny-Timer: " . $time);
         echo $html;
     }
 }

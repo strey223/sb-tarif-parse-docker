@@ -12,11 +12,6 @@ class Sbis
 
     public function hello()
     {
-        var_dump($_REQUEST);
-        exit;
-        if ($_REQUEST) {
-
-        }
         $curl = new Client();
         $response = $curl->request('GET', self::URL_DOMAIN . '/tariffs?tab=tenders');
         $status = $response->getStatusCode();
@@ -26,7 +21,6 @@ class Sbis
 
         $crawler->filter('script')
             ->each(function ($node) {
-                /** @var \DOMElement $domElement */
                 $domElement = $node->getNode(0);
                 $src = $domElement->getAttribute('src');
 
@@ -40,9 +34,8 @@ class Sbis
             });
 
 
-        $crawler->filter('head link')
+       /* $crawler->filter('head link')
             ->each(function ($node) {
-                /** @var \DOMElement $domElement */
                 $domElement = $node->getNode(0);
                 $href = $domElement->getAttribute('href');
 
@@ -54,7 +47,7 @@ class Sbis
                     return;
                 }
             });
-
+*/
         $content = $crawler->html();
         echo $content;
         //echo $content1;
@@ -62,5 +55,15 @@ class Sbis
         //$content = $crawler->filter('.billing-PriceList__service-detail.billing-PriceList__tip')->last()->html();
         //echo $content;
 
+    }
+
+    function redirectSbis()
+    {
+        $curl = new Client();
+        $request = $_SERVER['REQUEST_URI'] ?? '';
+        $response = $curl->request('GET', self::URL_DOMAIN . $request);
+        $html = $response->getBody()->getContents();
+
+        echo $html;
     }
 }

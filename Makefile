@@ -2,9 +2,6 @@
 
 include .env
 
-# MySQL
-MYSQL_DUMPS_DIR=data/db/dumps
-
 help:
 	@echo ""
 	@echo "usage: make COMMAND"
@@ -68,8 +65,5 @@ phpmd:
 test: code-sniff
 	@docker-compose exec -T php ./app/vendor/bin/phpunit --colors=always --configuration ./app/
 	@make resetOwner
-
-resetOwner:
-	@$(shell chown -Rf $(SUDO_USER):$(shell id -g -n $(SUDO_USER)) $(MYSQL_DUMPS_DIR) "$(shell pwd)/etc/ssl" "$(shell pwd)/web/app" 2> /dev/null)
 
 .PHONY: clean test code-sniff init

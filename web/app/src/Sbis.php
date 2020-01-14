@@ -9,6 +9,8 @@ class Sbis
 {
     /** @var string Домаин к СБИС */
     const URL_DOMAIN = 'https://sbis.ru';
+    /** @var float|int Хранения Кэша в секудах */
+    const STORAGE_CACHE_SECOND = 60 * 60 * 24 * 2;
 
     public function hello()
     {
@@ -49,6 +51,9 @@ class Sbis
 
                 $parseUrl = parse_url($url);
                 $path = $parseUrl['path'] ?? '';
+
+                $query = $parseUrl['query'] ?? ''; // После ?
+
                 if ($path) {
                     return;
                 }
@@ -59,26 +64,29 @@ class Sbis
                 $nameFile = $parsePathFile['basename'] ?? ''; // lib.inc.php
                 $pathFile = $parsePathFile['dirname'] ?? ''; // путь к файлу /www/htdocs/inc
 
-                //filemtime - время изменения файла
-
                 if (!$nameFile || !$pathFile ||
-                    !$extension || $extension !== 'js' || $extension !== 'css') {
+                    !$extension || !in_array($extension, ['js', 'css'])) {
                     return;
                 }
-
-                //$folderHash = md5($pathFile);
-
                 $assetsPath = Singleton::app()->basePath() . 'assets/';
 
-                $checkFile = $assetsPath . $nameFile;
-
-                /*if ($href && is_string($href)) {
-                    if ($href[0] == '/') {
-                        $href = self::URL_DOMAIN . $href;
+                $queryDirectory = $assetsPath;
+                if ($query) {
+                    $queryDirectory = $assetsPath . $query . '/';
+                    $isQueryDirectory = file_exists($queryDirectory);
+                    if (!$isQueryDirectory) {
+                        mkdir($queryDirectory);
                     }
-                    $domElement->setAttribute('href', $href);
-                    return;
-                }*/
+                }
+
+                $pathToFile = $queryDirectory . $nameFile;
+
+                if (!file_exists($pathToFile) || (time() - fileatime($pathToFile)) > self::STORAGE_CACHE_SECOND) {
+
+                    $responseHref = (new Client())->request('GET', $href);
+                    $contentFile = $responseHref->getBody();
+                    file_get_contents($contentFile);
+                }
             });
 
       /*$crawler->filter('head link')
@@ -114,23 +122,6 @@ class Sbis
         $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
         $url = self::URL_DOMAIN . $uri;
-       /* $parseUrl = parse_url($url);
-        $path = $parseUrl['path'] ?? '';
-
-        $parsePathFile = pathinfo($path);
-        $extension = $parsePathFile['extension'] ?? '';*/
-
-        /*$contentType = ;
-        switch ($extension) {
-            case 'css':
-                $contentType = 'text/css';
-                break;
-            case 'js':
-                $contentType = 'text/js';
-                break;
-            case 'json':
-                $contentType = 'application/json';
-        }*/
         $response = $request->request($requestMethod, $url);
         $contentType = $response->getHeader('content-type')[0] ?? 'text/html';
         $html = $response->getBody()->getContents();

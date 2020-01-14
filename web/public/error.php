@@ -8,21 +8,16 @@ $curl->redirectSbis();
  $path = $parseUrl['path'] ?? '';
 
  $parsePathFile = pathinfo($path);
- $extension = $parsePathFile['extension'] ?? '';
-$contentType = 'text/html';
-       switch ($extension) {
-           case 'css':
-               $contentType = 'text/css';
-               break;
-           case 'js':
-               $contentType = 'text/js';
-               break;
-           case 'json':
-               $contentType = 'application/json';
-       }
+ $extension = $parsePathFile['extension'] ?? '';*/
 
-
-$handle = fopen('https://sbis.ru' . $_SERVER['REQUEST_URI'], 'rb');
-       header('Content-Type: '.$contentType);
-fpassthru($handle);*/
-exit;
+/*$contentType = ;
+switch ($extension) {
+    case 'css':
+        $contentType = 'text/css';
+        break;
+    case 'js':
+        $contentType = 'text/js';
+        break;
+    case 'json':
+        $contentType = 'application/json';
+}*/

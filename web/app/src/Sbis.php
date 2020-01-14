@@ -89,21 +89,6 @@ class Sbis
                 }
             });
 
-      /*$crawler->filter('head link')
-        ->each(function ($node) {
-            $domElement = $node->getNode(0);
-            $href = $domElement->getAttribute('href');
-
-            if ($href && is_string($href)) {
-                if ($href[0] == '/') {
-                    $href = self::URL_DOMAIN . $href;
-                }
-                $domElement->setAttribute('href', $href);
-                return;
-            }
-        });*/
-
-
         $content = $crawler->html();
        // echo $html;
         //echo $content1;

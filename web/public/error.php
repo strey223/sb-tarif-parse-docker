@@ -2,7 +2,7 @@
 include '../app/vendor/autoload.php';
 use App\Acme\Sbis;
 $curl = new Sbis();
-$curl->redirectSbis();
+$curl->getFileOrRebirectSbis();
 
 /* $parseUrl = parse_url($url);
  $path = $parseUrl['path'] ?? '';

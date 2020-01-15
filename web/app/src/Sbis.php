@@ -38,8 +38,22 @@ class Sbis
             });
 
         $crawler->filter('.billing-PriceList__tabList-info-wrapper.controls-Scroll__userContent')
-            ->each(function ($node) {
-                $domElement = $node->getNode(0);
+            ->each(function (Crawler $crawler) {
+                foreach ($crawler as $node) {
+                    $node->parentNode->removeChild($node);
+                }
+            });
+        $crawler->filter('.sbis_ru-Header__fixed')
+            ->each(function (Crawler $crawler) {
+                foreach ($crawler as $node) {
+                    $node->parentNode->removeChild($node);
+                }
+            });
+        $crawler->filter('.sbis_ru-Footer sbis_ru-background.sbis_ru-section')
+            ->each(function (Crawler $crawler) {
+                foreach ($crawler as $node) {
+                    $node->parentNode->removeChild($node);
+                }
             });
 
         $crawler->filter('[href]')
@@ -109,6 +123,10 @@ class Sbis
     public function getFileOrRebirectSbis() {
         $uri = $_SERVER['REQUEST_URI'] ?? '';
         $requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        if (strpos($uri, '/tariffs?') !== false) {
+            return $this->hello();
+        }
+
 
         if ($requestMethod != 'GET') {
             return $this->redirectSbis();

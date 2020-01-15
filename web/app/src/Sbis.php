@@ -15,16 +15,15 @@ class Sbis
     public function hello()
     {
         $curl = new Client();
-        $uri = $_SERVER['REQUEST_URI'] ?? '';
-        $response = $curl->request('GET', self::URL_DOMAIN . $uri);
+
+        $response = $curl->request('GET', self::URL_DOMAIN . '/tariffs?tab=tenders');
         $contentType = $response->getHeader('content-type')[0] ?? 'text/html';
         $html = $response->getBody()->getContents();
-        /*header("Content-Type: $contentType");
-        echo $html;
-        exit;*/
+
         $crawler = new Crawler($html);
 
-     /*   $crawler->filter('script')
+
+        $crawler->filter('script')
             ->each(function ($node) {
                 $domElement = $node->getNode(0);
                 $src = $domElement->getAttribute('src');
@@ -36,9 +35,9 @@ class Sbis
                     $domElement->setAttribute('src', $src);
                     return;
                 }
-            });*/
+            });
 
-       /* $crawler->filter('.billing-PriceList__tabList-info-wrapper.controls-Scroll__userContent')
+        $crawler->filter('.billing-PriceList__tabList-info-wrapper.controls-Scroll__userContent')
             ->each(function ($node) {
                 $domElement = $node->getNode(0);
             });
@@ -94,11 +93,10 @@ class Sbis
                     $contentFile = $responseHref->getBody();
                     file_put_contents($pathToFile, $contentFile);
                 }
-            });*/
+            });
 
-        $content = $crawler->html();
+        $content = $crawler->outerHtml();
 
-        //$content = $crawler->filter('.billing-PriceList__service-detail.billing-PriceList__tip')->last()->html();
         header("Content-Type: $contentType");
         echo $content;
 

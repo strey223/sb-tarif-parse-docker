@@ -36,6 +36,9 @@ class Sbis
                     return;
                 }
             });
+        /*$doc = new \DOMDocument;
+        $doc->loadHtml("<link rel='stylesheet' type='text/css' href='/removeElement.css'>");
+        $crawler->filter('head')->addDocument($doc);*/
 
         $crawler->filter('.billing-PriceList__tabList-info-wrapper.controls-Scroll__userContent')
             ->each(function (Crawler $crawler) {

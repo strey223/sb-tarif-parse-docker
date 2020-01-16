@@ -13,3 +13,7 @@ a.billing-PriceList__footer-link {
 div.sbis_ru-Footer.sbis_ru-background.sbis_ru-section {
     display: none;
 }
+
+div.billing-PriceList__banner-wrapper.ws-flex-shrink-0 {
+    display: none;
+}

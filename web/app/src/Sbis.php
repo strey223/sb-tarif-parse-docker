@@ -21,7 +21,17 @@ class Sbis
         $html = $response->getBody()->getContents();
 
         $crawler = new Crawler($html);
+        /** @var \DOMDocument $domDocument */
+        $domDocument = $crawler->getNode(0)->parentNode;
 
+        $div = $domDocument->createElement('link');
+        $div->setAttribute('rel', 'stylesheet');
+        $div->setAttribute('type', 'text/css');
+        $div->setAttribute('href', '/removeElement.css?css');
+
+        /** @var \DOMDocument $head */
+        $head = $crawler->filter('head')->getNode(0);
+        $head->appendChild($div);
 
         $crawler->filter('script')
             ->each(function ($node) {
@@ -36,9 +46,6 @@ class Sbis
                     return;
                 }
             });
-        /*$doc = new \DOMDocument;
-        $doc->loadHtml("<link rel='stylesheet' type='text/css' href='/removeElement.css'>");
-        $crawler->filter('head')->addDocument($doc);*/
 
         $crawler->filter('.billing-PriceList__tabList-info-wrapper.controls-Scroll__userContent')
             ->each(function (Crawler $crawler) {

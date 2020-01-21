@@ -9,8 +9,8 @@ class Sbis
 {
     /** @var string Домаин к СБИС */
     const URL_DOMAIN = 'https://sbis.ru';
-    /** @var float|int Хранения Кэша в секудах */
-    const STORAGE_CACHE_SECOND = 60 * 60 * 24 * 2;
+    /** @var float|int Хранения Кэша в секудах 2 суток */
+    const STORAGE_CACHE_SECOND = 172800;
 
     public function hello()
     {

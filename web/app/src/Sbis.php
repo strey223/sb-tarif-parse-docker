@@ -111,6 +111,10 @@ class Sbis
 
                 $pathToFile = $queryDirectory . $nameFile;
 
+                if (!$nameFile == 'removeElement.css') {
+                    $this->redirectSbis();
+                }
+
                 if (!file_exists($pathToFile) || (time() - fileatime($pathToFile)) > self::STORAGE_CACHE_SECOND) {
 
                     $responseHref = (new Client())->request('GET', self::URL_DOMAIN . $href);

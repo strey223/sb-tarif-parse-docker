@@ -2,7 +2,7 @@
 include '../app/vendor/autoload.php';
 include '../config/config.php';
 
-throw new Exception(403);
+throw new Exception('Не найдена страница', 403);
 
 use App\Acme\Singleton;
 use App\Acme\Sbis;
